@@ -1,0 +1,44 @@
+<section class="panel">
+  <div class="heading">
+    <div>
+      <p class="eyebrow">Task editor</p>
+      <h2>{{ pageTitle }}</h2>
+    </div>
+    <a routerLink="/tasks">Back to tasks</a>
+  </div>
+
+  <p class="status" *ngIf="loading">Loading task...</p>
+  <p class="status error" *ngIf="error">{{ error }}</p>
+
+  <form [formGroup]="form" (ngSubmit)="save()" *ngIf="!loading">
+    <label>
+      <span>Title</span>
+      <input type="text" formControlName="title" placeholder="Plan release checklist" />
+      <small *ngIf="form.controls.title.touched && form.controls.title.invalid">
+        Title is required and must be at least 3 characters.
+      </small>
+    </label>
+
+    <label>
+      <span>Description</span>
+      <textarea formControlName="description" rows="5" placeholder="Add the important details"></textarea>
+      <small *ngIf="form.controls.description.touched && form.controls.description.invalid">
+        Description cannot be longer than 500 characters.
+      </small>
+    </label>
+
+    <label>
+      <span>Status</span>
+      <select formControlName="status">
+        <option [ngValue]="taskStatus.Pending">Pending</option>
+        <option [ngValue]="taskStatus.Completed">Completed</option>
+      </select>
+    </label>
+
+    <div class="actions">
+      <button type="submit" [disabled]="saving">
+        {{ saving ? 'Saving...' : 'Save task' }}
+      </button>
+    </div>
+  </form>
+</section>

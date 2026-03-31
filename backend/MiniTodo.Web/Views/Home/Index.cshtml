@@ -1,0 +1,77 @@
+@model MiniTodo.Web.ViewModels.HomeIndexViewModel
+@{
+    ViewData["Title"] = "Task Dashboard";
+}
+
+<div class="minitodo-hero">
+    <div>
+        <p class="eyebrow">Mini To-Do App</p>
+        <h1>Task Management System</h1>
+        <p class="lead">
+            A compact full-stack demo with ASP.NET Core 6, Web API, Razor, EF Core InMemory, and an Angular client.
+        </p>
+    </div>
+    <div class="hero-badge">
+        <strong>@Model.TotalTasks</strong>
+        <span>tasks tracked</span>
+    </div>
+</div>
+
+<div class="task-summary">
+    <div class="summary-card">
+        <span>Pending</span>
+        <strong>@Model.PendingTasks</strong>
+    </div>
+    <div class="summary-card">
+        <span>Completed</span>
+        <strong>@Model.CompletedTasks</strong>
+    </div>
+    <div class="summary-card">
+        <span>API</span>
+        <strong>/api/tasks</strong>
+    </div>
+</div>
+
+<section class="task-table-card">
+    <div class="section-heading">
+        <h2>Server-Side Task View</h2>
+        <p>The Razor page consumes the same task service as the API.</p>
+    </div>
+
+    @if (!Model.Tasks.Any())
+    {
+        <div class="empty-state">
+            No tasks yet. Open the Angular app or call the API to create your first task.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Updated</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var task in Model.Tasks)
+                {
+                    <tr>
+                        <td>@task.Title</td>
+                        <td>@task.Description</td>
+                        <td>
+                            <span class="status-pill @(task.Status.ToString().ToLowerInvariant())">
+                                @task.Status
+                            </span>
+                        </td>
+                        <td>@task.UpdatedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+</section>

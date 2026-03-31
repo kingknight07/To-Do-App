@@ -1,0 +1,75 @@
+<section class="hero">
+  <div>
+    <p class="eyebrow">Dashboard</p>
+    <h2>Tasks at a glance</h2>
+    <p class="hero-copy">
+      Create, edit, complete, and remove tasks through the Angular client backed by the ASP.NET Core API.
+    </p>
+  </div>
+  <a class="primary-link" routerLink="/tasks/new">Add task</a>
+</section>
+
+<div class="stats" *ngIf="tasks$ | async as tasks">
+  <article>
+    <span>Total</span>
+    <strong>{{ tasks.length }}</strong>
+  </article>
+  <article>
+    <span>Pending</span>
+    <strong>{{ countPending(tasks) }}</strong>
+  </article>
+  <article>
+    <span>Completed</span>
+    <strong>{{ countCompleted(tasks) }}</strong>
+  </article>
+</div>
+
+<p class="status error" *ngIf="error">{{ error }}</p>
+<p class="status" *ngIf="loading">Loading tasks...</p>
+
+<section class="panel" *ngIf="tasks$ | async as tasks">
+  <ng-container *ngIf="tasks.length > 0; else emptyState">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Task</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Updated</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let task of tasks">
+            <td>
+              <strong>{{ task.title }}</strong>
+            </td>
+            <td>{{ task.description || 'No description' }}</td>
+            <td>
+              <span class="pill" [ngClass]="task.status === taskStatus.Completed ? 'done' : 'pending'">
+                {{ taskStatusLabel(task.status) }}
+              </span>
+            </td>
+            <td>{{ task.updatedAt | date:'medium' }}</td>
+            <td class="actions">
+              <a [routerLink]="['/tasks', task.id, 'edit']">Edit</a>
+              <button type="button" (click)="toggleStatus(task)">
+                Mark {{ task.status === taskStatus.Completed ? 'Pending' : 'Completed' }}
+              </button>
+              <button type="button" class="danger" (click)="deleteTask(task)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </ng-container>
+
+  <ng-template #emptyState>
+    <div class="empty-state">
+      <h3>No tasks yet</h3>
+      <p>Add the first task to get the board moving.</p>
+      <a class="primary-link" routerLink="/tasks/new">Create task</a>
+    </div>
+  </ng-template>
+</section>

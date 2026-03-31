@@ -1,0 +1,24 @@
+# Build output
+bin/
+obj/
+dist/
+.angular/
+
+# Dependencies
+node_modules/
+
+# IDE files
+.idea/
+.vs/
+.vscode/
+
+# Logs
+*.log
+*.err
+
+# ASP.NET local files
+appsettings.Local.json
+
+# OS files
+Thumbs.db
+Desktop.ini
